@@ -30,38 +30,36 @@ const theme = createTheme({
   spacing: 8, // Default spacing
 });
 
-
-
 // Main component for rendering the user list
-function Customer() {
+export default function Index() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     UsersGet(setUsers);
-  }, []); // No need to add UsersGet as a dependency
+  }, []);
 
-  const UsersGet = async (setUsers) => {
-    try {
-      const response = await axios.get("http://10.13.4.47:4000/api/customer", {
-        headers: {
-          'Accept': 'application/form-data',
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      setUsers(response.data);
-    } catch (error) {
-      console.error('There was an error!', error);
-    }
+  // Function to fetch users from the API
+  const UsersGet = () => {
+    axios.get(`${url}/customer`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      setUsers(response.data);  // Update the state with the new list of customers
+    })
+    .catch((error) => {
+      console.error('Error fetching users', error);
+    });
   };
 
   // Function to handle user update
-  const UpdateUser = id => {
-    window.location = `/update/${id}`;
+  const UpdateUser = (id) => {
+    window.location = `/admin/customer/update/${id}`;
   }
 
   // Function to delete a user
-  const UserDelete = id => {
+  const UserDelete = (id) => {
     axios.delete(`${url}/customer/${id}`, {
       headers: {
         'Accept': 'application/form-data',
@@ -70,15 +68,18 @@ function Customer() {
       },
     })
     .then((response) => {
-      alert(response.data.message);
       if (response.data.status === true) {
-        UsersGet();
+        alert(response.data.message);
+        UsersGet(); // Fetch the updated list after deletion
+      } else {
+        alert('Failed to delete user');
       }
     })
     .catch((error) => {
       console.error('There was an error!', error);
     });
-  }
+  };
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -91,7 +92,7 @@ function Customer() {
               </Typography>
             </Box>
             <Box>
-              <Link to="/create">
+              <Link to="/admin/customer/create">
                 <Button variant="contained" color="primary">
                   เพิ่มข้อมูลลูกค้า
                 </Button>
@@ -139,4 +140,3 @@ function Customer() {
     </ThemeProvider>
   );
 }
-export default Customer;

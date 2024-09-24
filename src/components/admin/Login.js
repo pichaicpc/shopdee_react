@@ -35,7 +35,7 @@ function MyFunction(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+export default function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -123,6 +123,8 @@ export default function SignIn() {
               label="จำรหัสผ่าน"
             />
             <Button
+              id="btnLogin"
+              name="btnLogin"
               type="submit"
               fullWidth
               variant="contained"
