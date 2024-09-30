@@ -78,9 +78,9 @@ export default function SignIn() {
             <TextField
               margin="normal"
               required
-              fullWidth
-              id="username"
+              fullWidth              
               label="User Name"
+              id="username"
               name="username"
               autoComplete="username"
               autoFocus              

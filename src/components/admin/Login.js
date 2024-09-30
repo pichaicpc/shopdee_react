@@ -31,8 +31,7 @@ function MyFunction(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
+const url = process.env.REACT_APP_BASE_URL;
 const defaultTheme = createTheme();
 
 export default function Login() {
@@ -42,7 +41,7 @@ export default function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await axios.post(process.env.REACT_APP_BASE_URL+'/admin/login',
+        const response = await axios.post(url + '/admin/login',
             {
                 username,
                 password

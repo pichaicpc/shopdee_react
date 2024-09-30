@@ -3,9 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -15,6 +12,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useState, useEffect} from "react";
 import { useParams } from 'react-router-dom';
 import axios from "axios";
+import AppNavbar from '../components/AppNavbar';
+import SideMenu from '../components/SideMenu';
+
 
 const defaultTheme = createTheme();
 const token = localStorage.getItem('token');
@@ -75,6 +75,8 @@ export default function Update() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      <SideMenu />
+      <AppNavbar />            
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -89,7 +91,7 @@ export default function Update() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            แก้ไขข้อมูลลูกค้า
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -100,7 +102,7 @@ export default function Update() {
                   required
                   fullWidth
                   id="firstName"
-                  label="First Name"
+                  label="ชื่อ"
                   value={firstName}
                   onChange={ (e) => setFirstName(e.target.value) }
                   autoFocus
@@ -111,7 +113,7 @@ export default function Update() {
                   required
                   fullWidth
                   id="lastName"
-                  label="Last Name"
+                  label="นามสกุล"
                   name="lastName"
                   value={lastName}
                   onChange={ (e) => setLastName(e.target.value) }
@@ -123,7 +125,7 @@ export default function Update() {
                   required
                   fullWidth
                   id="username"
-                  label="User Name"
+                  label="ชื่อผู้ใช้"
                   name="username"
                   autoComplete="username"
                   value={username}
@@ -135,18 +137,12 @@ export default function Update() {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="รหัสผ่าน"
                   type="password"
                   id="password"
                   autoComplete="new-password"
                   value={password}
                   onChange={ (e) => setPassword(e.target.value) }
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
                 />
               </Grid>
             </Grid>
@@ -158,15 +154,8 @@ export default function Update() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              บันทึกข้อมูล
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>        
       </Container>

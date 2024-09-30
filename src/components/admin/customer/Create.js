@@ -3,9 +3,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -14,7 +11,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {useState} from "react";
 import axios from "axios";
-
+import AppNavbar from '../components/AppNavbar';
+import SideMenu from '../components/SideMenu';
 
 const defaultTheme = createTheme();
 
@@ -47,6 +45,8 @@ export default function Create() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      <SideMenu />
+      <AppNavbar />            
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -61,7 +61,7 @@ export default function Create() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+          เพิ่มข้อมูลสมาชิก
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -72,7 +72,7 @@ export default function Create() {
                   required
                   fullWidth
                   id="firstName"
-                  label="First Name"
+                  label="ชื่อ"
                   value={firstName}
                   onChange={ (e) => setFirstName(e.target.value) }
                   autoFocus
@@ -83,7 +83,7 @@ export default function Create() {
                   required
                   fullWidth
                   id="lastName"
-                  label="Last Name"
+                  label="นามสกุล"
                   name="lastName"
                   value={lastName}
                   onChange={ (e) => setLastName(e.target.value) }
@@ -95,7 +95,7 @@ export default function Create() {
                   required
                   fullWidth
                   id="username"
-                  label="User Name"
+                  label="ชื่่อผู้ใช้"
                   name="username"
                   autoComplete="username"
                   value={username}
@@ -107,7 +107,7 @@ export default function Create() {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="รหัสผ่าน"
                   type="password"
                   id="password"
                   autoComplete="new-password"
@@ -115,12 +115,7 @@ export default function Create() {
                   onChange={ (e) => setPassword(e.target.value) }
                 />
               </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid>
+     
             </Grid>
             <Button
               id="btnCreate"
@@ -130,15 +125,9 @@ export default function Create() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              บันทึกข้อมูล
             </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href="#" variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
-            </Grid>
+
           </Box>
         </Box>        
       </Container>
