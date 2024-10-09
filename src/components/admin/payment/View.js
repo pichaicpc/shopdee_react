@@ -69,7 +69,10 @@ export default function View() {
 
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box
+            id="payment_view"
+            name="payment_view" 
+            sx={{ display: 'flex' }}>
             <SideMenu />
             <AppNavbar />               
             <Container maxWidth="md" sx={{ marginTop: 4 }}>
@@ -139,8 +142,8 @@ export default function View() {
                 <Box sx={{ display: 'flex', justifyContent: 'center'}}>
                     <Button
                         type="submit"
-                        id="btnCreate"
-                        name="btnCreate"              
+                        id="btnOK"
+                        name="btnOK"              
                         color="primary"
                         variant="contained"
                         sx={{ m: 2 }}
@@ -151,8 +154,8 @@ export default function View() {
 
                     <Button
                         type="submit"
-                        id="btnCreate"
-                        name="btnCreate"              
+                        id="btnCancel"
+                        name="btnCancel"              
                         color="error"
                         variant="contained"
                         sx={{ m: 2 }}

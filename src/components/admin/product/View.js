@@ -20,54 +20,53 @@ import Box from '@mui/material/Box';
 const token = localStorage.getItem('token');
 const url = process.env.REACT_APP_BASE_URL;
 
+
 export default function View() {  
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");    
-  const [email, setEmail] = useState("");
-  const [gender, setGender] = useState("");
-  const [imageFile, setImageFile] = useState("");
-  const [address, setAddress] = useState("");
-  const [birthdate, setBirthdate] = useState("");
-  const [homePhone, setHomePhone] = useState("");
-  const [mobilePhone, setMobilePhone] = useState("");
   const { id } = useParams();
+  const [productName, setProductName] = useState("");
+  const [productDetail, setProductDetail] = useState("");
+  const [price, setPrice] = useState("");
+  const [cost, setCost] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [typeName, setTypeName] = useState("");  
 
   useEffect(() => {
-    // Fetch the current customer data when the component is mounted      
-    axios.get(`${url}/customer/${id}`,
+    // Fetch the current product data when the component is mounted          
+    axios.get(`${url}/product/${id}`,
       {
         headers: {
         'Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        const customer = response.data;        
-        setFirstName(customer.firstName);
-        setLastName(customer.lastName);   
-        setEmail(customer.email);
-        setGender(customer.gender);
-        setImageFile(customer.imageFile);
-        setAddress(customer.address);
-        setBirthdate(customer.birthdate);
-        setHomePhone(customer.homePhone);        
-        setMobilePhone(customer.mobilePhone);
+        const product = response.data;        
+        setProductName(product.productName); 
+        setProductDetail(product.productDetail); 
+        setPrice(product.price); 
+        setCost(product.cost); 
+        setQuantity(product.quantity); 
+        setImageFile(product.imageFile); 
+        setTypeName(product.typeName);      
       })
       .catch(error => {
-        console.error('Error fetching customer data:', error);
+        console.error('Error fetching product data:', error);
       });
   }, [id]);  
 
   // Function to handle user update
-  const UpdateUser = (id) => {
-    window.location = `/admin/customer/update/${id}`;
-  }  
+  const UpdateProduct = (id) => {
+    window.location = `/admin/product/update/${id}`;
+  }
+ 
+
   return (
     <Box sx={{ display: 'flex' }}>
       <SideMenu />
       <AppNavbar />    
       <Container 
-        id="customer_view" 
-        name="customer_view"
+        id="product_view" 
+        name="product_view"
         component="main" maxWidth="lg">        
         <CssBaseline />            
         <Breadcrumbs
@@ -75,54 +74,51 @@ export default function View() {
             sx={{ marginTop: '16px'}}
             separator={<NavigateNextRoundedIcon fontSize="small" />}
             >            
-            <Link href="/admin/customer"
+            <Link href="/admin/product"
             sx={{ color: 'text.primary'}}
             underline="hover"            
             >
-              ข้อมูลลูกค้า
+              ข้อมูลสินค้า
             </Link>
             <Typography variant="body1" sx={{ color: 'text.primary', fontWeight: 600 }}>
             แสดงรายละเอียด
             </Typography>
-        </Breadcrumbs>  
-
+        </Breadcrumbs>      
+             
         <Container maxWidth="sm" sx={{ marginTop: 4 }}>
             <Card>
                 <CardContent>
                     <Grid container spacing={2} alignItems="center">
                         <Grid item xs={12} sm={4}>
                             <Avatar sx={{ width: 100, height: 100 }}
-                            src={url + '/customer/image/' + imageFile}/>
+                            src={url + '/product/image/' + imageFile}/>
                         </Grid>
                         <Grid item xs={12} sm={8}>
                             <Typography variant="h5" gutterBottom>
-                                {firstName} {lastName}
+                                {productName}
                             </Typography>
                             <Typography color="textSecondary" gutterBottom>
-                                {email}
+                                {productDetail}
                             </Typography>
                             <Typography color="textSecondary">
-                                เพศ : {gender === 0 ? "ชาย" : gender === 1 ? "หญิง" : "-"}
+                                ราคา : {price}
                             </Typography>
                         </Grid>
                     </Grid>
                     <Divider sx={{ marginY: 2 }} />
                     <Typography variant="body1" gutterBottom>
-                        ที่อยู่ : {address ? address : '-'}
+                        ต้นทุน : {cost}
+                    </Typography>                    
+                    <Typography variant="body1" gutterBottom>
+                        จำนวน : {quantity}
                     </Typography>
                     <Typography variant="body1" gutterBottom>
-                        วันเกิด : {birthdate ? birthdate : '-'}
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                        โทรศัพท์บ้าน : {homePhone ? homePhone : '-'}
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                        โทรศัพท์เคลื่อนที่ : {mobilePhone ? mobilePhone : '-'}
+                        ประเภทสินค้า : {typeName}
                     </Typography>
                     <Divider sx={{ marginY: 2 }} />
                     <Button variant="contained" color="primary"
-                      onClick={() => UpdateUser(id)}>
-                        แก้ไขบัญชีผู้ใช้
+                      onClick={() => UpdateProduct(id)}>
+                        แก้ไขข้อมูลสินค้า
                     </Button>                    
                 </CardContent>
             </Card>

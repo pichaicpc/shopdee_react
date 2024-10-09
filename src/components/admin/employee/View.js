@@ -20,54 +20,52 @@ import Box from '@mui/material/Box';
 const token = localStorage.getItem('token');
 const url = process.env.REACT_APP_BASE_URL;
 
+
 export default function View() {  
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");    
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
   const [imageFile, setImageFile] = useState("");
-  const [address, setAddress] = useState("");
-  const [birthdate, setBirthdate] = useState("");
-  const [homePhone, setHomePhone] = useState("");
   const [mobilePhone, setMobilePhone] = useState("");
+  const [positionName, setPositionName] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
-    // Fetch the current customer data when the component is mounted      
-    axios.get(`${url}/customer/${id}`,
+    // Fetch the current employee data when the component is mounted      
+    console.log(token);
+    axios.get(`${url}/employee/${id}`,
       {
         headers: {
         'Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        const customer = response.data;        
-        setFirstName(customer.firstName);
-        setLastName(customer.lastName);   
-        setEmail(customer.email);
-        setGender(customer.gender);
-        setImageFile(customer.imageFile);
-        setAddress(customer.address);
-        setBirthdate(customer.birthdate);
-        setHomePhone(customer.homePhone);        
-        setMobilePhone(customer.mobilePhone);
+        const employee = response.data;        
+        setFirstName(employee.firstName);
+        setLastName(employee.lastName);   
+        setEmail(employee.email);
+        setGender(employee.gender);
+        setImageFile(employee.imageFile);
+        setMobilePhone(employee.mobilePhone);
+        setPositionName(employee.positionName);        
       })
       .catch(error => {
-        console.error('Error fetching customer data:', error);
+        console.error('Error fetching employee data:', error);
       });
   }, [id]);  
 
   // Function to handle user update
   const UpdateUser = (id) => {
-    window.location = `/admin/customer/update/${id}`;
+    window.location = `/admin/employee/update/${id}`;
   }  
   return (
     <Box sx={{ display: 'flex' }}>
       <SideMenu />
       <AppNavbar />    
       <Container 
-        id="customer_view" 
-        name="customer_view"
+        id="employee_view" 
+        name="employee_view"
         component="main" maxWidth="lg">        
         <CssBaseline />            
         <Breadcrumbs
@@ -75,24 +73,23 @@ export default function View() {
             sx={{ marginTop: '16px'}}
             separator={<NavigateNextRoundedIcon fontSize="small" />}
             >            
-            <Link href="/admin/customer"
+            <Link href="/admin/employee"
             sx={{ color: 'text.primary'}}
             underline="hover"            
             >
-              ข้อมูลลูกค้า
+              ข้อมูลพนักงาน
             </Link>
             <Typography variant="body1" sx={{ color: 'text.primary', fontWeight: 600 }}>
-            แสดงรายละเอียด
+            รายละเอียด
             </Typography>
-        </Breadcrumbs>  
-
+        </Breadcrumbs>       
         <Container maxWidth="sm" sx={{ marginTop: 4 }}>
             <Card>
                 <CardContent>
                     <Grid container spacing={2} alignItems="center">
                         <Grid item xs={12} sm={4}>
                             <Avatar sx={{ width: 100, height: 100 }}
-                            src={url + '/customer/image/' + imageFile}/>
+                            src={url + '/employee/image/' + imageFile}/>
                         </Grid>
                         <Grid item xs={12} sm={8}>
                             <Typography variant="h5" gutterBottom>
@@ -108,16 +105,10 @@ export default function View() {
                     </Grid>
                     <Divider sx={{ marginY: 2 }} />
                     <Typography variant="body1" gutterBottom>
-                        ที่อยู่ : {address ? address : '-'}
+                       ตำแหน่ง : {positionName ? positionName : '-'}
                     </Typography>
                     <Typography variant="body1" gutterBottom>
-                        วันเกิด : {birthdate ? birthdate : '-'}
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                        โทรศัพท์บ้าน : {homePhone ? homePhone : '-'}
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                        โทรศัพท์เคลื่อนที่ : {mobilePhone ? mobilePhone : '-'}
+                       เบอร์โทร : {mobilePhone ? mobilePhone : '-'}
                     </Typography>
                     <Divider sx={{ marginY: 2 }} />
                     <Button variant="contained" color="primary"
@@ -127,7 +118,7 @@ export default function View() {
                 </CardContent>
             </Card>
         </Container>
-      </Container>
+      </Container>        
     </Box>
   );
 }

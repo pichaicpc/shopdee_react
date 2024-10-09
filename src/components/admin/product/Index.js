@@ -11,54 +11,56 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Avatar from '@mui/material/Avatar';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import { Link } from "react-router-dom";
 import axios from 'axios';
-import AppNavbar from '../components/AppNavbar';
-import SideMenu from '../components/SideMenu';
 import TextField from '@mui/material/TextField';
 import TablePagination from '@mui/material/TablePagination';
+
+import AppNavbar from '../components/AppNavbar';
+import SideMenu from '../components/SideMenu';
+
 
 const defaultTheme = createTheme();
 const token = localStorage.getItem('token');
 const url = process.env.REACT_APP_BASE_URL;
 
-
-// Main component for rendering the order list
+// Main component for rendering the product list
 export default function Index() {
-  const [orders, setOrders] = useState([]);
+  const [products, setProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredOrders, setFilteredOrders] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: '', direction: 'asc' });
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10); // default rows per page
 
   useEffect(() => {
-    OrdersGet(setOrders);
+    ProductsGet(setProducts);
   }, []);
 
-  // Function to fetch orders from the API
-  const OrdersGet = () => {
-    axios.get(`${url}/admin/history`, {
+  // Function to fetch products from the API
+  const ProductsGet = () => {
+    axios.get(`${url}/product`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
     })
     .then((response) => {
-      setOrders(response.data);
-      setFilteredOrders(response.data);
+      setProducts(response.data); 
+      setFilteredProducts(response.data);
     })
     .catch((error) => {
-      console.error('Error fetching orders', error);
+      console.error('Error fetching products', error);
     });
   };
 
-  // Function to filter orders based on the search query
+  // Function to filter products based on the search query
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
-    setFilteredOrders(orders.filter((order) =>      
-      order.orderDate.toLowerCase().includes(query) ||      
-      order.status.toLowerCase().includes(query)
+    setFilteredProducts(products.filter((product) =>
+      product.productName.toLowerCase().includes(query)      
     ));
   };
   
@@ -73,16 +75,39 @@ export default function Index() {
     setPage(0); // Reset to first page when rows per page change
   };
 
-  // Function to view a order's details
-  const ViewOrder = (id) => {
-    window.location = `/admin/order/view/${id}`;
+  // Function to view a product's details
+  const ViewProduct = (id) => {
+    window.location = `/admin/product/view/${id}`;
   }
 
-  const ViewPayment = (id) => {
-    window.location = `/admin/payment/view/${id}`;
+  // Function to handle product update
+  const UpdateProduct = (id) => {
+    window.location = `/admin/product/update/${id}`;
   }
 
-  // Function to sort orders
+  // Function to delete a product
+  const DeleteProduct = (id) => {
+    axios.delete(`${url}/product/${id}`, {
+      headers: {
+        'Accept': 'application/form-data',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    })
+    .then((response) => {
+      if (response.data.status === true) {
+        alert(response.data.message);
+        ProductsGet(); // Fetch the updated list after deletion
+      } else {
+        alert('Failed to delete product');
+      }
+    })
+    .catch((error) => {
+      console.error('There was an error!', error);
+    });
+  };
+
+  // Function to sort products
   const handleSort = (key) => {
     let direction = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -91,7 +116,7 @@ export default function Index() {
     setSortConfig({ key, direction });
   };
 
-  const sortedOrders = filteredOrders.sort((a, b) => {
+  const sortedProducts = filteredProducts.sort((a, b) => {
     if (a[sortConfig.key] < b[sortConfig.key]) {
       return sortConfig.direction === 'asc' ? -1 : 1;
     }
@@ -100,13 +125,12 @@ export default function Index() {
     }
     return 0;
   });
-  
 
-  return (
+  return (      
     <ThemeProvider theme={defaultTheme}>
       <Box 
-        id="order_index"
-        name="order_index"
+        id="product_index"
+        name="product_index"
         sx={{ display: 'flex' }}>
         <SideMenu />
         <AppNavbar />        
@@ -117,13 +141,25 @@ export default function Index() {
             <Box display="flex">
               <Box flexGrow={1}>
                 <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                  รายการสั่งซื้อ
+                  รายการข้อมูลสินค้า
                 </Typography>
               </Box>
             </Box>
 
             {/* Search Bar */}
-            <Box display="flex" justifyContent="flex-end" mb={2}>        
+            <Box display="flex" alignItems="center" mb={2}>
+              <Box flexGrow={1} mr={2}>
+                <Link to="/admin/product/create">
+                  <Button
+                    id="btnCreate"
+                    name="btnCreate"
+                    variant="contained"
+                    sx={{ backgroundColor: 'success.light' }}
+                  >
+                    เพิ่มข้อมูลสินค้า
+                  </Button>
+                </Link>
+              </Box>            
               <Box>
                 <TextField
                   id="search"
@@ -133,50 +169,60 @@ export default function Index() {
                   size="small"                             
                   value={searchQuery}
                   onChange={handleSearch}
-                  placeholder="ค้นหาด้วยวันที่สั่งซื้อ, สถานะ"
+                  placeholder="ค้นหาด้วยชื่อสินค้า"
                   sx={{ width: '260px' }} 
                 />
               </Box>
             </Box>
 
-            <TableContainer component={Paper}>
+            <TableContainer>
               <Table aria-label="simple table">
                 <TableHead>
                   <TableRow>
-                    <TableCell align="right" onClick={() => handleSort('orderID')}><strong>รหัส</strong></TableCell>
-                    <TableCell align="center" onClick={() => handleSort('orderDate')}><strong>วันที่สั่งซื้อ</strong></TableCell>                    
-                    <TableCell align="right"><strong>ราคารวม</strong></TableCell>
-                    <TableCell align="center" onClick={() => handleSort('status')}><strong>สถานะ</strong></TableCell>                    
+                    <TableCell align="right" onClick={() => handleSort('productID')}><strong>รหัส</strong></TableCell>
+                    <TableCell align="center"><strong>รูปภาพ</strong></TableCell>
+                    <TableCell align="left" onClick={() => handleSort('productName')}><strong>ชื่อสินค้า</strong></TableCell>
                     <TableCell align="center"><strong>จัดการข้อมูล</strong></TableCell>
                   </TableRow>
                 </TableHead>
 
                 <TableBody>
-                  {sortedOrders
+                  {sortedProducts
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Pagination logic
-                    .map((order) => (
-                    <TableRow key={order.orderID}>
-                      <TableCell align="center">{order.orderID}</TableCell> 
-                      <TableCell align="center">{order.orderDate}</TableCell>                    
-                      <TableCell align="right">฿{order.totalPrice.toLocaleString(undefined, {maximumFractionDigits:2})}</TableCell>
-                      <TableCell align="center">{order.status}</TableCell>                     
+                    .map((product) => (
+                    <TableRow key={product.productID}>
+                      <TableCell align="right">{product.productID}</TableCell>
                       <TableCell align="center">
-                        <ButtonGroup color="primary" aria-label="outlined primary button group"> 
+                        <Box display="flex" justifyContent="center">
+                          <Avatar src={url + '/product/image/' + product.imageFile} />
+                        </Box>
+                      </TableCell>
+                      <TableCell align="left">{product.productName}</TableCell>
+                      <TableCell align="center">
+                        <ButtonGroup variant="contained" aria-label="Basic button group">
                           <Button 
-                              id="btnOrder"
-                              name="btnOrder" 
-                              onClick={() => ViewOrder(order.orderID)}
-                              sx={{backgroundColor: 'info.light', color: 'white'}}
+                            id="btnView"
+                            name="btnView" 
+                            onClick={() => ViewProduct(product.productID)}
+                            sx={{backgroundColor: 'info.light',color: 'white'}}
                           >
-                              การสั่งซื้อ
+                            แสดง
                           </Button>
                           <Button 
-                              id="btnPayment"
-                              name="btnPayment" 
-                              onClick={() => ViewPayment(order.orderID)}
-                              sx={{backgroundColor: 'warning.light', color: 'white'}}
+                            id="btnUpdate"
+                            name="btnUpdate" 
+                            onClick={() => UpdateProduct(product.productID)}
+                            sx={{backgroundColor: 'warning.light', color: 'white'}}
                           >
-                              การชำระเงิน
+                              แก้ไข
+                          </Button>
+                          <Button 
+                            id="btnDelete"
+                            name="btnDelete" 
+                            onClick={() => DeleteProduct(product.productID)}
+                            sx={{backgroundColor: 'error.light', color: 'white'}}
+                          >
+                              &nbsp;ลบ&nbsp;
                           </Button>
                         </ButtonGroup>
                       </TableCell>
@@ -185,11 +231,11 @@ export default function Index() {
                 </TableBody>
               </Table>
             </TableContainer>
-
+            
             {/* Pagination */}            
             <TablePagination
               component="div"
-              count={filteredOrders.length}
+              count={filteredProducts.length}
               page={page}
               onPageChange={handleChangePage}
               rowsPerPage={rowsPerPage}

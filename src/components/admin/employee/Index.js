@@ -40,13 +40,13 @@ export default function Index() {
 
   // Fetch users from the API
   const UsersGet = () => {
-    axios.get(`${url}/customer`, {
+    axios.get(`${url}/employee`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
     })
       .then((response) => {
-        setUsers(response.data);  // Update the state with the new list of customers
+        setUsers(response.data);  // Update the state with the new list of employees
         setFilteredUsers(response.data); // Set initially filtered users to the whole list
       })
       .catch((error) => {
@@ -78,17 +78,17 @@ export default function Index() {
 
   // Function to view a user's details
   const ViewUser = (id) => {
-    window.location = `/admin/customer/view/${id}`;
+    window.location = `/admin/employee/view/${id}`;
   };
 
   // Function to handle user update
   const UpdateUser = (id) => {
-    window.location = `/admin/customer/update/${id}`;
+    window.location = `/admin/employee/update/${id}`;
   };
 
   // Function to delete a user
   const DeleteUser = (id) => {
-    axios.delete(`${url}/customer/${id}`, {
+    axios.delete(`${url}/employee/${id}`, {
       headers: {
         'Accept': 'application/form-data',
         'Content-Type': 'application/json',
@@ -130,8 +130,8 @@ export default function Index() {
   return (
     <ThemeProvider theme={defaultTheme}>
     <Box 
-      id="customer_index"
-      name="customer_index"
+      id="employee_index"
+      name="employee_index"
       sx={{ display: 'flex' }}>
       <SideMenu />
       <AppNavbar />
@@ -142,7 +142,7 @@ export default function Index() {
           <Box display="flex">
             <Box flexGrow={1}>
               <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                รายการข้อมูลลูกค้า
+                รายการข้อมูลพนักงาน
               </Typography>
             </Box>
           </Box>
@@ -150,14 +150,14 @@ export default function Index() {
           {/* Search Bar */}
           <Box display="flex" alignItems="center" mb={2}>
             <Box flexGrow={1} mr={2}>
-              <Link to="/admin/customer/create">
+              <Link to="/admin/employee/create">
                 <Button
                   id="btnCreate"
                   name="btnCreate"
                   variant="contained"
                   sx={{ backgroundColor: 'success.light' }}
                 >
-                  เพิ่มข้อมูลลูกค้า
+                  เพิ่มข้อมูลพนักงาน
                 </Button>
               </Link>
             </Box>            
@@ -181,7 +181,7 @@ export default function Index() {
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell align="right" onClick={() => handleSort('custID')}><strong>รหัส</strong></TableCell>
+                  <TableCell align="right" onClick={() => handleSort('empID')}><strong>รหัส</strong></TableCell>
                   <TableCell align="center"><strong>รูปภาพ</strong></TableCell>
                   <TableCell align="left" onClick={() => handleSort('firstName')}><strong>ชื่อ</strong></TableCell>
                   <TableCell align="left" onClick={() => handleSort('lastName')}><strong>นามสกุล</strong></TableCell>
@@ -194,11 +194,11 @@ export default function Index() {
                 {sortedUsers
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Pagination logic
                   .map((user) => (
-                    <TableRow key={user.custID}>
-                      <TableCell align="right">{user.custID}</TableCell>
+                    <TableRow key={user.empID}>
+                      <TableCell align="right">{user.empID}</TableCell>
                       <TableCell align="center">
                         <Box display="flex" justifyContent="center">
-                          <Avatar src={url + '/customer/image/' + user.imageFile} />
+                          <Avatar src={url + '/employee/image/' + user.imageFile} />
                         </Box>
                       </TableCell>
                       <TableCell align="left">{user.firstName}</TableCell>
@@ -209,7 +209,7 @@ export default function Index() {
                           <Button 
                             id="btnView"
                             name="btnView" 
-                            onClick={() => ViewUser(user.custID)}
+                            onClick={() => ViewUser(user.empID)}
                             sx={{backgroundColor: 'info.light',color: 'white'}}
                           >
                             แสดง
@@ -217,7 +217,7 @@ export default function Index() {
                           <Button 
                             id="btnUpdate"
                             name="btnUpdate" 
-                            onClick={() => UpdateUser(user.custID)}
+                            onClick={() => UpdateUser(user.empID)}
                             sx={{backgroundColor: 'warning.light', color: 'white'}}
                           >
                               แก้ไข
@@ -225,7 +225,7 @@ export default function Index() {
                           <Button 
                             id="btnDelete"
                             name="btnDelete" 
-                            onClick={() => DeleteUser(user.custID)}
+                            onClick={() => DeleteUser(user.empID)}
                             sx={{backgroundColor: 'error.light', color: 'white'}}
                           >
                               &nbsp;ลบ&nbsp;

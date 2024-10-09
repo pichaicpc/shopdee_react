@@ -14,6 +14,21 @@ import OrderIndex from './components/admin/order/Index';
 import OrderView from './components/admin/order/View';
 import PaymentView from './components/admin/payment/View';
 
+import EmployeeIndex from './components/admin/employee/Index';
+import EmployeeCreate from './components/admin/employee/Create';
+import EmployeeView from './components/admin/employee/View';
+import EmployeeUpdate from './components/admin/employee/Update';
+
+import ProductIndex from './components/admin/product/Index';
+import ProductCreate from './components/admin/product/Create';
+import ProductView from './components/admin/product/View';
+import ProductUpdate from './components/admin/product/Update';
+
+import ProductTypeIndex from './components/admin/producttype/Index';
+import ProductTypeCreate from './components/admin/producttype/Create';
+import ProductTypeView from './components/admin/producttype/View';
+import ProductTypeUpdate from './components/admin/producttype/Update';
+
 
 
 import React from 'react';
@@ -40,6 +55,23 @@ function App() {
         <Route exact path='/admin/order/view/:id' element={<OrderView/>}/>
         
         <Route exact path='/admin/payment/view/:id' element={<PaymentView/>}/>
+
+        <Route exact path='/admin/employee' element={<EmployeeIndex/>}/>
+        <Route exact path='/admin/employee/create' element={<EmployeeCreate/>}/>  
+        <Route exact path='/admin/employee/view/:id' element={<EmployeeView/>}/>      
+        <Route exact path='/admin/employee/update/:id' element={<EmployeeUpdate/>}/>
+
+        <Route exact path='/admin/product' element={<ProductIndex/>}/>
+        <Route exact path='/admin/product/create' element={<ProductCreate/>}/>  
+        <Route exact path='/admin/product/view/:id' element={<ProductView/>}/>      
+        <Route exact path='/admin/product/update/:id' element={<ProductUpdate/>}/>
+        
+        <Route exact path='/admin/producttype' element={<ProductTypeIndex/>}/>
+        <Route exact path='/admin/producttype/create' element={<ProductTypeCreate/>}/>  
+        <Route exact path='/admin/producttype/view/:id' element={<ProductTypeView/>}/>      
+        <Route exact path='/admin/producttype/update/:id' element={<ProductTypeUpdate/>}/>
+        
+        
       </Routes>
     </Router>
   );

@@ -43,7 +43,10 @@ export default function View() {
 
 
     return (
-        <Box sx={{ display: 'flex' }}>
+        <Box 
+            id="order_view"
+            name="order_view"
+            sx={{ display: 'flex' }}>
             <SideMenu />
             <AppNavbar />                 
             <Container maxWidth="md" sx={{ marginTop: 4 }}>

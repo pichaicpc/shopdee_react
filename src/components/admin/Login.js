@@ -53,12 +53,19 @@ export default function Login() {
         alert(result['message']);
 
         if(result['status'] === true){
-            localStorage.setItem('token', result['token']);
-            window.location.href = '/admin/customer';
+            localStorage.setItem('token', result['token']);          
+            localStorage.setItem('empID', result['empID']);
+            localStorage.setItem('firstName', result['firstName']);
+            localStorage.setItem('lastName', result['lastName']);
+            localStorage.setItem('email', result['email']);
+            localStorage.setItem('positionID', result['positionID']);            
+            localStorage.setItem('imageFile', result['imageFile']);
+            localStorage.setItem('positionID', result['positionID']);            
+            window.location.href = '/admin';
         }
     }
 
-  return (
+  return (      
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -69,7 +76,7 @@ export default function Login() {
             flexDirection: 'column',
             alignItems: 'center',
           }}
-        >
+        >          
           <Avatar sx={{ m: 1, bgcolor: 'primary.dark' }}>            
             <LockOutlinedIcon/>            
           </Avatar>

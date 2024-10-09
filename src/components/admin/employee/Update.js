@@ -13,13 +13,12 @@ import SideMenu from '../components/SideMenu';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextRoundedIcon from '@mui/icons-material/NavigateNextRounded';
 import Link from '@mui/material/Link';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
-import { styled } from '@mui/material/styles';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-
 
 const token = localStorage.getItem('token');
 const url = process.env.REACT_APP_BASE_URL;
@@ -42,43 +41,34 @@ export default function Update() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState(""); 
   const [imageFile, setImageFile] = useState(null);
-  const [birthdate, setBirthdate] = useState("");
-  const [address, setAddress] = useState("");
-  const [homePhone, setHomePhone] = useState("");
-  const [mobilePhone, setMobilePhone] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
-    // Fetch the current customer data when the component is mounted      
-    axios.get(`${url}/customer/${id}`,
+    // Fetch the current employee data when the component is mounted      
+    axios.get(`${url}/employee/${id}`,
       {
         headers: {
         'Authorization': `Bearer ${token}`,
         },
       })
       .then(response => {
-        const customer = response.data;
-        setUsername(customer.username);
-        setFirstName(customer.firstName);
-        setLastName(customer.lastName); 
-        setEmail(customer.email);
-        setGender(customer.gender);
-        setImageFile(customer.imageFile); 
-        setBirthdate(customer.birthdate);
-        setAddress(customer.address);
-        setHomePhone(customer.homePhone);        
-        setMobilePhone(customer.mobilePhone);  
+        const employee = response.data;
+        setUsername(employee.username);
+        setFirstName(employee.firstName);
+        setLastName(employee.lastName);     
+        setEmail(employee.email);
+        setGender(employee.gender);
+        setImageFile(employee.imageFile);    
       })
       .catch(error => {
-        console.error('Error fetching customer data:', error);
+        console.error('Error fetching employee data:', error);
       });
   }, [id]);
 
-
   const handleSubmit = async (e) => {
-      e.preventDefault();
+    e.preventDefault();
 
     // Create a FormData object
     const formData = new FormData();
@@ -88,16 +78,12 @@ export default function Update() {
     formData.append('lastName', lastName);
     formData.append('email', email);
     formData.append('gender', gender);
-    formData.append('birthdate', birthdate);
-    formData.append('address', address);
-    formData.append('homePhone', homePhone);
-    formData.append('mobilePhone', mobilePhone);
 
     if (imageFile) {
       formData.append('imageFile', imageFile); // Append image file if it exists
     }
 
-    const response = await axios.put(`${url}/customer/${id}`, formData, 
+    const response = await axios.put(`${url}/employee/${id}`, formData,
       {
         headers: {              
           'Authorization': `Bearer ${token}`,
@@ -110,7 +96,7 @@ export default function Update() {
     alert(result['message']);
 
     if(result['status'] === true){            
-        window.location.href = '/admin/customer';
+        window.location.href = '/admin/employee';
     }
   }
 
@@ -123,24 +109,24 @@ export default function Update() {
       <SideMenu />
       <AppNavbar />            
       <Container 
-        id="customer_update" 
-        name="customer_update"
+        id="employee_update" 
+        name="employee_update"
         component="main" maxWidth="lg">        
         <CssBaseline />            
         <Breadcrumbs
-            aria-label="breadcrumb"
-            sx={{ marginTop: '16px'}}
-            separator={<NavigateNextRoundedIcon fontSize="small" />}
-            >            
-            <Link href="/admin/customer"
+          aria-label="breadcrumb"
+          sx={{ marginTop: '16px'}}
+          separator={<NavigateNextRoundedIcon fontSize="small" />}
+        >            
+          <Link href="/admin/employee"
             sx={{ color: 'text.primary'}}
             underline="hover"            
-            >
-              ข้อมูลลูกค้า
-            </Link>
-            <Typography variant="body1" sx={{ color: 'text.primary', fontWeight: 600 }}>
+          >
+            ข้อมูลพนักงาน
+          </Link>
+          <Typography variant="body1" sx={{ color: 'text.primary', fontWeight: 600 }}>
             แก้ไข
-            </Typography>
+          </Typography>
         </Breadcrumbs>
 
         <Container maxWidth="xs" sx={{alignContent: 'center'}}> 
@@ -209,51 +195,6 @@ export default function Update() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="birthdate"
-                  name="birthdate"
-                  label="วันเกิด (yyyy-dd-mm)"                  
-                  autoComplete="birthdate"
-                  value={birthdate}
-                  onChange={ (e) => setBirthdate(e.target.value) }
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField                  
-                  fullWidth
-                  id="address"
-                  name="address"
-                  label="ที่อยู่"                  
-                  autoComplete="address"
-                  value={address}
-                  onChange={ (e) => setAddress(e.target.value) }
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField                  
-                  fullWidth
-                  id="homePhone"
-                  name="homePhone"
-                  label="โทรศัพท์บ้าน"                  
-                  autoComplete="homePhone"
-                  value={homePhone}
-                  onChange={ (e) => setHomePhone(e.target.value) }
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField                  
-                  fullWidth
-                  id="mobilePhone"
-                  name="mobilePhone"
-                  label="โทรศัพท์เคลื่อนที่"                  
-                  autoComplete="mobilePhone"
-                  value={mobilePhone}
-                  onChange={ (e) => setMobilePhone(e.target.value) }
-                />
-              </Grid>
-              <Grid item xs={12}>
                 <FormLabel component="legend">เพศ</FormLabel> {/* Gender label */}
                 <RadioGroup
                   aria-label="gender"
@@ -282,7 +223,7 @@ export default function Update() {
                   />
                 </Button>
                 {imageFile && <Typography>{imageFile.name}</Typography>} {/* Display selected image name */}
-              </Grid>                 
+              </Grid>              
             </Grid>
             <Button
               id="btnCreate"

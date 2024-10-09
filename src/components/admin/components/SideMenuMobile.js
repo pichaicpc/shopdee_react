@@ -8,12 +8,24 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
+import Link from '@mui/material/Link';
 
 import MenuButton from './MenuButton';
 import MenuContent from './MenuContent';
-import CardAlert from './CardAlert';
+
+const empID = localStorage.getItem('empID');
+const firstName = localStorage.getItem('firstName');
+const lastName = localStorage.getItem('lastName');
+const imageFile = localStorage.getItem('imageFile');
+const url = process.env.REACT_APP_BASE_URL;
 
 function SideMenuMobile({ open, toggleDrawer }) {
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = '/admin/login';
+  };
+
   return (
     <Drawer
       anchor="right"
@@ -37,14 +49,16 @@ function SideMenuMobile({ open, toggleDrawer }) {
             direction="row"
             sx={{ gap: 1, alignItems: 'center', flexGrow: 1, p: 1 }}
           >
-            <Avatar
-              sizes="small"
-              alt="Riley Carter"
-              src="/static/images/avatar/7.jpg"
-              sx={{ width: 24, height: 24 }}
-            />
+            <Link href={`/admin/employee/view/${empID}`} underline='none'>
+              <Avatar              
+                sizes="small"
+                alt={firstName + ' ' + lastName}
+                src={`${url}/employee/image/${imageFile}`}
+                sx={{ width: 24, height: 24 }}
+              />
+            </Link>
             <Typography component="p" variant="h6">
-              Riley Carter
+              {firstName + ' ' + lastName}
             </Typography>
           </Stack>
           <MenuButton showBadge>
@@ -55,11 +69,13 @@ function SideMenuMobile({ open, toggleDrawer }) {
         <Stack sx={{ flexGrow: 1 }}>
           <MenuContent />
           <Divider />
-        </Stack>
-        <CardAlert />
+        </Stack>        
         <Stack sx={{ p: 2 }}>
-          <Button variant="outlined" fullWidth startIcon={<LogoutRoundedIcon />}>
-            Logout
+          <Button variant="outlined" 
+            fullWidth 
+            startIcon={<LogoutRoundedIcon />}
+            onClick={handleLogout}>
+            ออกจากระบบ
           </Button>
         </Stack>
       </Stack>
